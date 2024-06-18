@@ -12,6 +12,7 @@ RTOS based question &amp; answer system
   - langdetect
   - urllib
   - requests
+  - pyinstaller
 
 # GetData.py
 
