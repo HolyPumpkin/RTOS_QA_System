@@ -1,12 +1,22 @@
 import jieba
 from langdetect import detect
 
-# 知识库
-knowledge_base = {
-    "RTOS": "RTOS是实时操作系统的简称，它是一种能够及时响应外部事件的计算机操作系统，适用于那些对时间敏感的应用。",
-    "RTOS特点": "RTOS的主要特点包括确定性、优先级调度、任务间通信机制和实时性。",
-    # 更多问题和答案...
-}
+### 读取知识库
+# 定义文件路径
+file_path = 'knowledge.txt'
+
+# 初始化知识库字典
+knowledge_base = {}
+
+# 读取文件内容
+with open(file_path, 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+
+# 解析文件内容并构建知识库
+for line in lines:
+    if ": " in line:
+        key, value = line.split(": ", 1)
+        knowledge_base[key.strip()] = value.strip()
 
 # 检测输入文本的语言
 def detect_language(text):
@@ -91,9 +101,9 @@ def find_answer(question):
     if matched_answers:
         # 根据匹配关键词数量排序
         matched_answers.sort(key=lambda x: len(x[0]), reverse=True)
-        return f"您的问题中提到了'{matched_answers[0][0]}', 相关信息为：{matched_answers[0][1]}"
+        return f"您的问题中提到了'{matched_answers[0][0]}', 相关信息为：{matched_answers[0][1]}" + "--输入'退出'来结束（input 'exit' to stop）"
     else:
-        return "对不起，我没有找到关于这个问题的答案。"
+        return "对不起，我没有找到关于这个问题的答案。" + "--输入'退出'来结束（input 'exit' to stop）"
 
 ### 步骤 3: 用户交互
 
@@ -106,4 +116,7 @@ if __name__ == "__main__":
             break
         else:
             answer = find_answer(user_input)
-            print(answer)
+            print(answer + "--输入'退出'来结束（input 'exit' to stop）")
+    
+# 防止程序闪退，等待用户输入
+input("按回车键退出...")
